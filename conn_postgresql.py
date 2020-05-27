@@ -1,5 +1,4 @@
 import psycopg2
-import psycopg2.extensions
 
 
 class Conexion:
@@ -16,11 +15,20 @@ class Conexion:
     def cerrar_conexion(self):
         self.db.close()
 
-    def registros(self, sql, parametro=None):
+    def consultas(self, sql, parametro=None):
         self.cursor.execute(sql, parametro)
         self.db.commit()
 
-    def registro_libros(self, pedidos):
+    def mostrar(self, sql, parametro=None):
+        self.cursor.execute(sql, parametro)
+        tabla = self.cursor.fetchall()
+        for dato in tabla:
+            self.id_editorial == dato[0]
+            self.nom_ed == dato[1]
+            self.pais_ed == dato[2]
+            self.telefono_ed == dato[3]
+
+    def registroEditorial(self, pedidos):
         self.cursor.executemany(
             "INSERT INTO compras(cont, idproducto, cantidad) VALUES ('%s', '%s','%s')",
             pedidos
