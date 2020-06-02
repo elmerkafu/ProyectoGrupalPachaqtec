@@ -1,8 +1,4 @@
-from Controladores.controlador_postgresql import (
-    ControladorEditorial,
-    ControladorLibro,
-    ControladorTipoLibro
-)
+import Controladores.controlador_postgresql
 from os import system
 
 class vistaAdministrador:
@@ -83,13 +79,16 @@ class vistaAdministrador:
     @staticmethod
     def listar_editorial():
         print(ControladorEditorial.controladorMostrar())
+        input("Presionar cualquier tecla para continuar")
 
     @staticmethod
     def listar_tipo_libro():
         print(ControladorTipoLibro.controladorMostrar())
+        input("Presionar cualquier tecla para continuar")
     
     @staticmethod
     def listar_libro():
         print(ControladorLibro.controladorMostrar())
+        input("Presionar cualquier tecla para continuar")
 
 vistaAdministrador.menu()

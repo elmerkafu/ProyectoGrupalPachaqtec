@@ -1,7 +1,4 @@
-from Modelos.model_postgresql import Conexion
-
-DATOS_CONEXION = {
-    'server': 'localhost',
+import Modelos.model_postgresql
     'user': 'postgres',
     'password': '199705',
     'database': 'biblioteca'
@@ -30,6 +27,7 @@ class ControladorTipoLibro:
         Conexion(**DATOS_CONEXION).consultas("""
         insert into tipo_libro(nombre_tipo) values('{0}')
         """.format(nombre_tipo))
+
     @staticmethod
     def controladorMostrar(parametro = None):
         tabla = Conexion(**DATOS_CONEXION).mostrar("""
