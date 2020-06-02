@@ -19,18 +19,13 @@ class Conexion:
         self.cursor.execute(sql, parametro)
         self.db.commit()
 
+    def registroMasivo(self, pedidos):
+        self.cursor.executemany(sql, pedidos)
+        self.db.commit()
+
     def mostrar(self, sql, parametro=None):
         self.cursor.execute(sql, parametro)
         tabla = self.cursor.fetchall()
-        for dato in tabla:
-            self.id_editorial == dato[0]
-            self.nom_ed == dato[1]
-            self.pais_ed == dato[2]
-            self.telefono_ed == dato[3]
+        return tabla
 
-    def registroEditorial(self, pedidos):
-        self.cursor.executemany(
-            "INSERT INTO compras(cont, idproducto, cantidad) VALUES ('%s', '%s','%s')",
-            pedidos
-        )
-        self.db.commit()
+
