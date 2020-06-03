@@ -1,5 +1,12 @@
-import Controladores.controlador_postgresql
+from controlador_postgresql import(
+    ControladorEditorial,
+    ControladorLibro,
+    ControladorTipoLibro,
+    ControladorUsusario,
+    controladorPrestamos
+)
 from os import system
+
 
 class vistaAdministrador:
 
@@ -8,7 +15,8 @@ class vistaAdministrador:
         continuar = True
         while continuar:
             system('clear')
-            print("Bienvenido a la seccion Registro de Editoriales")
+            print("Bienvenido a la seccion Registro de la biblioteca")
+            print("-------------------------------------------------")
             print("Elija 1 para registrar Editorial")
             print("Elija 2 para registrar categoria de libro")
             print("Elija 3 para registrar Nuevo libro")
@@ -91,4 +99,84 @@ class vistaAdministrador:
         print(ControladorLibro.controladorMostrar())
         input("Presionar cualquier tecla para continuar")
 
-vistaAdministrador.menu()
+class vistaUsuario:
+
+    @staticmethod
+    def menu():
+        continuar = True
+        while continuar:
+            system('clear')
+            print("Bienvenido a la seccion de Usuarios")
+            print("--------------------------------------------")
+            print("Elija 1 para registrar Nuevo Usuario")
+            print("Elija 2 para mostrar ranking de prestamos")
+            opcion = int(input("Eliga una opcion : "))
+            if opcion == 1:
+                system('clear')
+                vistaUsuario.ingreso_usuario()
+            elif opcion == 2:
+                system('clear')
+                pass
+            else:
+                continuar = False
+    
+    @staticmethod
+    def ingreso_usuario():
+        nombre = input("Ingrese su nombre : ")
+        apellido = input("Ingrese su apellido : ")
+        dni = input("Ingrese su dni : ")
+        pwd = input("Ingrese una contraseña : ")
+        DATOS_USUARIO = {
+            'nombre' : nombre,
+            'apellido' : apellido,
+            'dni' : dni,
+            'pwd' : pwd
+        }
+        ControladorUsusario.controladorRegistro(**DATOS_USUARIO)
+
+class vistaPrestamos:
+
+    @staticmethod
+    def menu():
+        continuar = True
+        while continuar:
+            system('clear')
+            print("Bienvenido a la seccion de prestamos")
+            print("--------------------------------------------")
+            print("Elija 1 para registrar Prestamo")
+            print("Elija 2 buscar libros")
+            print("Elija 3 para mostrar prestamos")
+            opcion = int(input("Eliga una opcion : "))
+            if opcion == 1:
+                system('clear')
+                vistaPrestamos.ingreso_prestamo()
+            elif opcion == 2:
+                system('clear')
+                vistaPrestamos.busqueda_libro()
+            elif opcion == 3:
+                system('clear')
+                pass
+            else:
+                continuar = False
+    
+    @staticmethod
+    def ingreso_prestamo():
+        id_usuario = input("Ingrese su codigo Usuario : ")
+        id_libro = input("Ingrese el codigo del libro : ")
+        print("FORMATO DE LA FECHA AAAA-MM-DD")
+        fecha_devolucion = input("Ingrese la fecha de devolucion  : ")
+        DATOS_PRESTAMO = {
+            'id_usuario' : id_usuario,
+            'id_libro' : id_libro,
+            'fecha_devolucion' : fecha_devolucion
+        }
+        controladorPrestamos.controladorRegistro(**DATOS_PRESTAMO)
+
+    def busqueda_libro():
+        print("Bienvenido a la seccion de busqueda de libros")
+        print("--------------------------------------------") 
+        id_libro = input("Ingrese Codigo de libro : ")
+        controladorPrestamos.controladorBusqueda(id_libro)
+        input("Presione cualquier tecla para continuar")
+
+vistaPrestamos.menu()

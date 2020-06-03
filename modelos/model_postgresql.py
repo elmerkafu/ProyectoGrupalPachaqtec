@@ -26,6 +26,14 @@ class Conexion:
     def mostrar(self, sql, parametro=None):
         self.cursor.execute(sql, parametro)
         tabla = self.cursor.fetchall()
-        return tabla
+        for dato in tabla:
+            print(dato)
 
+    def mostrarLibro(self, sql, parametro=None):
+        self.cursor.execute(sql, parametro)
+        tabla = self.cursor.fetchone()
+        print("""
+            TITTULO : {0}
+            AUTOR : {1}
 
+        """.format(tabla[0]))
