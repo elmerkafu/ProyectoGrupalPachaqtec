@@ -1,8 +1,7 @@
-import controlador
-import modelos
-import vista
+from vistas import vistaApp
 
 def main():
-    pass
+    
+    vistaApp.menu()
 
 main()

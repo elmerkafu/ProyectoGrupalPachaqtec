@@ -51,6 +51,7 @@ class ControladorLibro:
         """.format(
             titulo, autor, id_ed, isbn, paginas, id_tipo_libro, disponible
         ))
+        
     @staticmethod
     def controladorMostrar(parametro=None):
         tabla = Conexion(**DATOS_CONEXION).mostrar("""
@@ -67,18 +68,43 @@ class ControladorUsusario:
         ) values ('{0}','{1}','{2}','{3}')
         """.format(nombre, apellido, dni, pwd))
 
-class controladorPrestamos:
+class ControladorPrestamos:
 
     @staticmethod
     def controladorRegistro(
         id_usuario, id_libro,fecha_devolucion
     ):
+
         Conexion(**DATOS_CONEXION).consultas("""
         insert into prestamos(
             id_usuario, id_libro,
             fecha_prestamo, fecha_devolucion 
         ) values('{0}','{1}',current_date ,'{2}')
         """.format(id_usuario, id_libro, fecha_devolucion))
+
+        Conexion(**DATOS_CONEXION).consultas("""
+        update libro set disponible = 'no-disponible' where id_libro = '{0}'
+        and disponible = 'disponible'
+        """.format(id_libro))
+
+
+    @staticmethod
+    def controladorDevolucion(id_usuario, id_libro):
+
+        Conexion(**DATOS_CONEXION).consultas("""
+        insert into prestamos(
+            id_usuario, id_libro,
+            fecha_prestamo, fecha_devolucion 
+        ) values('{0}','{1}',current_date , current_date)
+        """.format(id_usuario, id_libro))
+
+        Conexion(**DATOS_CONEXION).consultas("""
+        update libro set disponible = 'disponible' where id_libro = '{0}'
+        and disponible = 'no-disponible'
+        """.format(id_libro))
+
+        ##select * from prestamos where fecha_prestamo = fecha_devolucion   
+        ##para traer las devoluciones
 
     @staticmethod
     def controladorBusqueda(id_libro):
@@ -90,4 +116,4 @@ class controladorPrestamos:
         """.format(id_libro))
         
         
-##print(ControladorLibro().controladorMostrar())
+        

@@ -1,4 +1,2 @@
-
 pyhton3
-pymongo
 psycopg2

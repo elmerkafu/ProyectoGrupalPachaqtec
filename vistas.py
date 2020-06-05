@@ -3,7 +3,7 @@ from controlador_postgresql import(
     ControladorLibro,
     ControladorTipoLibro,
     ControladorUsusario,
-    controladorPrestamos
+    ControladorPrestamos
 )
 from os import system
 
@@ -110,6 +110,8 @@ class vistaUsuario:
             print("--------------------------------------------")
             print("Elija 1 para registrar Nuevo Usuario")
             print("Elija 2 para mostrar ranking de prestamos")
+            print("Elija 3 Registrar Prestamos")
+            print("Elija 4 para volver al menu principal")
             opcion = int(input("Eliga una opcion : "))
             if opcion == 1:
                 system('clear')
@@ -117,6 +119,9 @@ class vistaUsuario:
             elif opcion == 2:
                 system('clear')
                 pass
+            elif opcion == 3:
+                system('clear')
+                vistaPrestamos.menu()
             else:
                 continuar = False
     
@@ -141,11 +146,12 @@ class vistaPrestamos:
         continuar = True
         while continuar:
             system('clear')
-            print("Bienvenido a la seccion de prestamos")
-            print("--------------------------------------------")
+            print("Bienvenido a la seccion de PRESTAMOS Y DEVOLUCIONES")
+            print("---------------------------------------------------")
             print("Elija 1 para registrar Prestamo")
-            print("Elija 2 buscar libros")
-            print("Elija 3 para mostrar prestamos")
+            print("Elija 2 buscar libros disponibles")
+            print("Elija 3 para registrar devolucion")
+            print("Elija 4 para volver al menu principal")
             opcion = int(input("Eliga una opcion : "))
             if opcion == 1:
                 system('clear')
@@ -155,7 +161,7 @@ class vistaPrestamos:
                 vistaPrestamos.busqueda_libro()
             elif opcion == 3:
                 system('clear')
-                pass
+                vistaPrestamos.devolicion_libro()
             else:
                 continuar = False
     
@@ -170,13 +176,45 @@ class vistaPrestamos:
             'id_libro' : id_libro,
             'fecha_devolucion' : fecha_devolucion
         }
-        controladorPrestamos.controladorRegistro(**DATOS_PRESTAMO)
+        ControladorPrestamos.controladorRegistro(**DATOS_PRESTAMO)
 
+    @staticmethod
+    def devolicion_libro():
+        id_usuario = input("Ingrese su codigo Usuario : ")
+        id_libro = input("Ingrese el codigo del libro : ")
+        DATOS_PRESTAMO = {
+            'id_usuario' : id_usuario,
+            'id_libro' : id_libro
+        }
+        ControladorPrestamos.controladorDevolucion(**DATOS_PRESTAMO)        
+
+    @staticmethod
     def busqueda_libro():
         print("Bienvenido a la seccion de busqueda de libros")
         print("--------------------------------------------") 
         id_libro = input("Ingrese Codigo de libro : ")
-        controladorPrestamos.controladorBusqueda(id_libro)
+        ControladorPrestamos.controladorBusqueda(id_libro)
         input("Presione cualquier tecla para continuar")
 
-vistaPrestamos.menu()
+class vistaApp:
+
+    @staticmethod
+    def menu():
+        continuar = True
+        while continuar:
+            system('clear')
+            print("Bienvenido a la Biblioteca bob")
+            print("------------------------------")
+            print("Elija 1 para ingresar al ADMINISTRADOR")
+            print("Elija 2 para ingresar al USUARIO")
+            opcion = int(input("Eliga una opcion : "))
+
+            if opcion == 1:
+                system('clear')
+                vistaAdministrador.menu()
+            elif opcion == 2:
+                system('clear')
+                vistaUsuario.menu()
+            else:
+                continuar = False
+        

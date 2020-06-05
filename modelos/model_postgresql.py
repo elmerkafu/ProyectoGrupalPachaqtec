@@ -34,6 +34,14 @@ class Conexion:
         tabla = self.cursor.fetchone()
         print("""
             TITTULO : {0}
-            AUTOR : {1}
+            AUTOR : {1} -- CATEGORIA : {2}
+            ISBN : {3} --  PAGINAS: {4}
+            EDITORIAL : {5}
+            DISPONIBILIDAD : {6}
+        """.format(
+            tabla[0], tabla[1], tabla[2],
+            tabla[3], tabla[4], tabla[5],
+            tabla[6]
+            ))
 
-        """.format(tabla[0]))
+
