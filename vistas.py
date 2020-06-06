@@ -56,7 +56,12 @@ class vistaAdministrador:
             'pais_ed': pais_ed,
             'telefono_ed': telefono_ed
             }
-        ControladorEditorial.controladorRegistro(**DATOS_EDITORIAL)
+        registro_correcto = ControladorEditorial.controladorRegistro(**DATOS_EDITORIAL)
+        if registro_correcto[0]:
+            print("La editorial se inserto correctamente.")
+        else:
+            print(registro_correcto[1])
+        input("Presione cualquier tecla para continuar")
 
     @staticmethod
     def ingreso_tipo_libro():
@@ -72,7 +77,7 @@ class vistaAdministrador:
         isbn = input("Ingrese el ISBN : ")
         paginas = input("Ingrese el numero de paginas : ")
         id_tipo_libro = input("Ingrese el codigo Categoria de libro : ")
-        cantidad = input("Ingrese la cantidad de ejemplares : ")
+        disponible = input("Ingrese disponibilidad : ")
         DATOS_LIBRO = {
             'titulo' : titulo,
             'autor' : autor,
@@ -80,23 +85,29 @@ class vistaAdministrador:
             'isbn' : isbn,
             'paginas' : paginas,
             'id_tipo_libro' : id_tipo_libro,
-            'cantidad' : cantidad
+            'disponible' : disponible
         }
         ControladorLibro.controladorRegistro(**DATOS_LIBRO)
 
     @staticmethod
     def listar_editorial():
-        print(ControladorEditorial.controladorMostrar())
+        editoriales = ControladorEditorial.controladorMostrar()
+        for editorial in editoriales:
+            print(editorial)
         input("Presionar cualquier tecla para continuar")
 
     @staticmethod
     def listar_tipo_libro():
-        print(ControladorTipoLibro.controladorMostrar())
+        tipos = ControladorTipoLibro.controladorMostrar()
+        for tipo in tipos:
+            print(tipo)
         input("Presionar cualquier tecla para continuar")
     
     @staticmethod
     def listar_libro():
-        print(ControladorLibro.controladorMostrar())
+        libros = ControladorLibro.controladorMostrar()
+        for libro in libros:
+            print(libro)
         input("Presionar cualquier tecla para continuar")
 
 class vistaUsuario:
@@ -193,7 +204,9 @@ class vistaPrestamos:
         print("Bienvenido a la seccion de busqueda de libros")
         print("--------------------------------------------") 
         id_libro = input("Ingrese Codigo de libro : ")
-        ControladorPrestamos.controladorBusqueda(id_libro)
+        libros = ControladorPrestamos.controladorBusqueda(id_libro)
+        for libro in libros:
+            print(libro)
         input("Presione cualquier tecla para continuar")
 
 class vistaApp:

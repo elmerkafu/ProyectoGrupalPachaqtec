@@ -1,4 +1,8 @@
-from modelos.model_postgresql import Conexion
+from modelos.model_postgresql import (
+    Conexion, ConexionEditorial,
+    ConexionTipoLibro, ConexionLibro,
+    ConexionUsuario, ConexionPrestamos
+)
 
 
 DATOS_CONEXION = {
@@ -12,29 +16,29 @@ class ControladorEditorial:
 
     @staticmethod      
     def controladorRegistro(nom_ed, pais_ed, telefono_ed):
-        Conexion(**DATOS_CONEXION).consultas("""
-        insert into editorial(nom_ed, pais_ed, telefono_ed) values('{0}', '{1}', '{2}');
-        """.format(nom_ed, pais_ed, telefono_ed))
+        datos_insercion = ConexionEditorial(
+            **DATOS_CONEXION
+        ).insertar(
+            nom_ed, pais_ed, telefono_ed
+        )
+        return datos_insercion
+
 
     @staticmethod
     def controladorMostrar(parametro=None):
-        tabla = Conexion(**DATOS_CONEXION).mostrar("""
-        SELECT * FROM editorial   
-        """)
+        tabla = ConexionEditorial(**DATOS_CONEXION).mostrar()
+        return tabla
     
 class ControladorTipoLibro:
 
     @staticmethod
     def controladorRegistro(nombre_tipo):
-        Conexion(**DATOS_CONEXION).consultas("""
-        insert into tipo_libro(nombre_tipo) values('{0}')
-        """.format(nombre_tipo))
+        ConexionTipoLibro(**DATOS_CONEXION).insertar(nombre_tipo)
 
     @staticmethod
     def controladorMostrar(parametro = None):
-        tabla = Conexion(**DATOS_CONEXION).mostrar("""
-        SELECT * FROM tipo_libro   
-        """)
+        tabla = ConexionTipoLibro(**DATOS_CONEXION).mostrar()
+        return tabla
 
 class ControladorLibro:
 
@@ -42,78 +46,45 @@ class ControladorLibro:
     def controladorRegistro(
         titulo, autor, id_ed, isbn, paginas, id_tipo_libro, disponible
     ):
-        Conexion(**DATOS_CONEXION).consultas("""
-        insert into libro(
-            titulo, autor, id_ed, isbn, paginas, id_tipo_libro, disponible
-            ) values(
-                {0}, {1}, {2}, {3}, {4}, {5}
-            )
-        """.format(
-            titulo, autor, id_ed, isbn, paginas, id_tipo_libro, disponible
-        ))
+        ConexionLibro(**DATOS_CONEXION).insertar(
+            titulo, autor, id_ed, isbn, 
+            paginas, id_tipo_libro, 
+            disponible
+        )
         
     @staticmethod
     def controladorMostrar(parametro=None):
-        tabla = Conexion(**DATOS_CONEXION).mostrar("""
-        SELECT * FROM libro   
-        """)
+        tabla = ConexionLibro(**DATOS_CONEXION).mostrar()
+        return tabla
 
 class ControladorUsusario:
 
     @staticmethod
     def controladorRegistro(nombre, apellido, dni, pwd):
-        Conexion(**DATOS_CONEXION).consultas("""
-        insert into usuarios(
+        ConexionUsuario(**DATOS_CONEXION).insertar(
             nombre, apellido, dni, pwd
-        ) values ('{0}','{1}','{2}','{3}')
-        """.format(nombre, apellido, dni, pwd))
+        )
 
 class ControladorPrestamos:
 
     @staticmethod
-    def controladorRegistro(
-        id_usuario, id_libro,fecha_devolucion
-    ):
+    def controladorRegistro(id_usuario, id_libro,fecha_devolucion):
 
-        Conexion(**DATOS_CONEXION).consultas("""
-        insert into prestamos(
-            id_usuario, id_libro,
-            fecha_prestamo, fecha_devolucion 
-        ) values('{0}','{1}',current_date ,'{2}')
-        """.format(id_usuario, id_libro, fecha_devolucion))
-
-        Conexion(**DATOS_CONEXION).consultas("""
-        update libro set disponible = 'no-disponible' where id_libro = '{0}'
-        and disponible = 'disponible'
-        """.format(id_libro))
-
+        ConexionPrestamos(**DATOS_CONEXION).insertarPrestamo(
+            id_usuario, id_libro,fecha_devolucion
+        )
 
     @staticmethod
     def controladorDevolucion(id_usuario, id_libro):
 
-        Conexion(**DATOS_CONEXION).consultas("""
-        insert into prestamos(
-            id_usuario, id_libro,
-            fecha_prestamo, fecha_devolucion 
-        ) values('{0}','{1}',current_date , current_date)
-        """.format(id_usuario, id_libro))
-
-        Conexion(**DATOS_CONEXION).consultas("""
-        update libro set disponible = 'disponible' where id_libro = '{0}'
-        and disponible = 'no-disponible'
-        """.format(id_libro))
-
-        ##select * from prestamos where fecha_prestamo = fecha_devolucion   
-        ##para traer las devoluciones
+        ConexionPrestamos(**DATOS_CONEXION).insertarDevolucion(
+            id_usuario, id_libro
+        )
 
     @staticmethod
     def controladorBusqueda(id_libro):
-        Conexion(**DATOS_CONEXION).mostrarLibro("""
-        SELECT titulo, autor, tipo_libro, isbn, paginas, nom_ed, disponible FROM libro 
-        INNER JOIN editorial ON libro.id_ed = editorial.id_ed
-        INNER JOIN tipo_libro ON libro.id_tipo_libro = tipo_libro.id_tipo_libro
-        WHERE id_libro = '{0}'
-        """.format(id_libro))
+        tabla = ConexionPrestamos(**DATOS_CONEXION).mostrar(id_libro)
+        return tabla
         
         
         
